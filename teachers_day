@@ -1,0 +1,429 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Happy Teachers' Day!</title>
+
+    <!-- Casual Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Patrick Hand', cursive;
+        }
+
+        body {
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.25), rgba(20, 40, 60, 0.35)),
+                url("istockphoto-2160438109-612x612.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.93);
+            padding: 40px 30px;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, 0.1);
+
+            text-align: center;
+
+            max-width: 520px;
+            width: 100%;
+
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 10px;
+
+            animation: bounce 2s infinite;
+        }
+
+        h1 {
+            color: #333;
+
+            font-weight: 800;
+
+            font-size: 2.2rem;
+
+            margin-bottom: 15px;
+
+            line-height: 1.2;
+        }
+
+        h1 span {
+            color: #4a6cf7;
+        }
+
+        .sub-text {
+            color: #666;
+
+            font-size: 1rem;
+
+            margin-bottom: 30px;
+        }
+
+        /* Message Card */
+
+        .card {
+            background: #f8faff;
+
+            border-left: 5px solid #4a6cf7;
+
+            padding: 22px;
+
+            border-radius: 10px;
+
+            margin-bottom: 25px;
+
+            display: none;
+
+            opacity: 0;
+
+            transform: scale(0.9);
+
+            transition:
+                opacity 0.5s ease,
+                transform 0.5s ease;
+        }
+
+        .card p {
+            font-style: italic;
+
+            color: #444;
+
+            line-height: 1.7;
+
+            font-size: 0.98rem;
+        }
+
+        .card .author {
+            display: block;
+
+            margin-top: 12px;
+
+            font-weight: 600;
+
+            color: #4a6cf7;
+
+            font-size: 0.9rem;
+        }
+
+        /* From Prayag */
+
+        .from-prayag {
+            margin-top: 18px;
+
+            color: #555;
+
+            font-size: 0.95rem;
+
+            font-weight: 600;
+
+            text-align: right;
+        }
+
+        /* Button */
+
+        .wish-btn {
+            background: #4a6cf7;
+
+            color: white;
+
+            border: none;
+
+            padding: 15px 35px;
+
+            font-size: 1.1rem;
+
+            font-weight: 600;
+
+            border-radius: 50px;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 8px 20px rgba(74, 108, 247, 0.3);
+
+            transition:
+                background 0.3s,
+                transform 0.2s;
+        }
+
+        .wish-btn:hover {
+            background: #3556d8;
+
+            transform: scale(1.05);
+        }
+
+        .wish-btn:active {
+            transform: scale(0.98);
+        }
+
+        .personal-note {
+            margin-top: 18px;
+
+            color: #888;
+
+            font-size: 0.78rem;
+        }
+
+        @keyframes bounce {
+
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+            body {
+                background-attachment: scroll;
+                padding: 14px;
+            }
+
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .sub-text {
+                font-size: 1.05rem;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="icon">👩‍🏫</div>
+
+        <h1>
+            A Little <span>Thank You!</span>
+        </h1>
+
+        <p class="sub-text">
+            For the teachers who make every lesson, every question, and every day a little brighter.
+        </p>
+
+
+        <!-- Random Message Card -->
+
+        <div class="card" id="messageCard">
+
+            <p id="messageText"></p>
+
+            <span class="author">
+                — With Warmest Wishes,<br>
+                <strong>Prantar</strong>
+            </span>
+
+            <div class="from-prayag">
+                Thank you for inspiring us every day! 💙
+            </div>
+
+        </div>
+
+
+        <button
+            class="wish-btn"
+            id="wishBtn"
+            onclick="revealWish()"
+        >
+            Open Your Thank-You 💌
+        </button>
+
+        
+
+    </div>
+
+
+    <script>
+
+        /*
+        ==========================================
+        TEACHER MESSAGES
+        ==========================================
+        */
+
+        const teacherMessages = [
+            "A great teacher can turn a difficult lesson into a moment of discovery. Thank you for making learning feel exciting and meaningful. 🌟",
+
+            "Thank you for being patient with our questions, supportive through our mistakes, and encouraging when things get difficult. You truly make a difference. 💙",
+
+            "The best teachers don't just give us answers; they teach us how to find them. Thank you for helping us become curious, confident learners. 🔎✨",
+
+            "Behind every lesson is your time, effort, and care. We may not say it every day, but we genuinely appreciate everything you do for us. ❤️",
+
+            "Your classroom is more than a place to study—it is a place where ideas grow, confidence builds, and memories are made. Thank you! 🌱",
+
+            "Some teachers teach subjects, while the best teachers leave us with lessons for life. Thank you for being one of them. 📚",
+
+            "Thank you for believing in your students, even on the days when we don't quite believe in ourselves. Your encouragement means more than you know. 🌈",
+
+            "A school day may end when the bell rings, but the lessons of a caring teacher stay with us long after. Happy Teachers' Day! 🎓",
+
+            "You make learning feel less like memorising and more like discovering. Thank you for inspiring us to ask, explore, and keep improving. 🚀",
+
+            "For every explanation, every correction, every smile, and every 'try again'—thank you for helping us become better than we were yesterday. 😊",
+
+            "A teacher's impact cannot always be measured by marks. Sometimes it is measured by confidence, curiosity, and the courage to keep trying. Thank you! ✨",
+
+            "Thank you for making difficult things feel possible and ordinary days feel special. Wishing you a very Thank You, Teacher! 🎉"
+        ];
+
+
+        /*
+        ==========================================
+        GET ONE PERMANENT MESSAGE
+        ==========================================
+        */
+
+        function getTeacherMessage() {
+
+            // Check whether this teacher already has a message
+            let savedMessage =
+                localStorage.getItem("prayagTeacherMessage");
+
+            // If yes, return the same message
+            if (savedMessage) {
+                return savedMessage;
+            }
+
+            // Otherwise choose a random message
+            const randomIndex =
+                Math.floor(
+                    Math.random() * teacherMessages.length
+                );
+
+            const selectedMessage =
+                teacherMessages[randomIndex];
+
+            // Save it permanently for this browser
+            localStorage.setItem(
+                "prayagTeacherMessage",
+                selectedMessage
+            );
+
+            return selectedMessage;
+        }
+
+
+        /*
+        ==========================================
+        REVEAL WISH
+        ==========================================
+        */
+
+        function revealWish() {
+
+            const card =
+                document.getElementById("messageCard");
+
+            const btn =
+                document.getElementById("wishBtn");
+
+            /*
+            Get the teacher's permanently
+            assigned message.
+            */
+
+            const message =
+                getTeacherMessage();
+
+            document.getElementById("messageText")
+                .textContent = message;
+
+
+            /*
+            Confetti celebration
+            */
+
+            confetti({
+                particleCount: 150,
+
+                spread: 80,
+
+                origin: {
+                    y: 0.6
+                }
+            });
+
+
+            /*
+            Reveal message
+            */
+
+            card.style.display = "block";
+
+            requestAnimationFrame(() => {
+
+                card.style.opacity = "1";
+
+                card.style.transform =
+                    "scale(1)";
+
+            });
+
+
+            /*
+            Disable button after first click.
+            The teacher gets only ONE message.
+            */
+
+            btn.innerHTML =
+                "Thank You, Teacher! 🎉";
+
+            btn.disabled = true;
+
+            btn.style.cursor = "default";
+
+            btn.style.opacity = "0.85";
+
+        }
+
+    </script>
+
+</body>
+</html>
